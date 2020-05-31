@@ -13,6 +13,8 @@
 #define INDEX_ALLOCATED 6
 #define INDEX_ALLOCATED_P 7
 
+extern Cleanup cleanup;
+
 #define CLEANUP_ADD(data, length, index, list, type) \
 	int i, oldlen;\
 \
@@ -22,8 +24,6 @@
 \
 	for(i = 0; i < length; i++)\
 		(list)[i + oldlen] = data[i];
-
-extern Cleanup cleanup;
 
 void cleanupInit(void)
 {

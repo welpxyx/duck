@@ -9,7 +9,7 @@
 
 char *program_name;
 
-int print_glfw_error(void);
+void print_glfw_error(int error_code, const char *description);
 
 Window *createWindow(Window *win, const char *title, int width, int height)
 {
@@ -21,22 +21,20 @@ Window *createWindow(Window *win, const char *title, int width, int height)
 
 	GLenum glewerr;
 
-	if(!glfwInit())
-		print_glfw_error();
+	glfwSetErrorCallback(print_glfw_error);
+
+	glfwInit();
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	glfwSwapInterval(1);
 
 	win->obj = glfwCreateWindow(width, height, title, NULL, NULL);
 	cleanupAddWindow(&win->obj, 1);
 
-	if(win->obj == NULL)
-		print_glfw_error();
-
 	glfwMakeContextCurrent(win->obj);
+	glfwSwapInterval(1);
 
 	glewerr = glewInit();
 	if(glewerr != GLEW_OK) {
@@ -47,12 +45,8 @@ Window *createWindow(Window *win, const char *title, int width, int height)
 	return win;
 }
 
-int print_glfw_error(void)
+void print_glfw_error(int error_code, const char *description)
 {
-	char errormsg[128];
-	int code = glfwGetError((const char **)errormsg);
-	
-	printf("GLFW failed to initialize: %s\n", errormsg);
-
-	return code;
+	(void) error_code;
+	printf("GLFW error: %s\n", description);
 }

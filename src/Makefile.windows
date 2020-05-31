@@ -1,0 +1,31 @@
+CROSS=x86_64-w64-mingw32.static
+PKG_CONFIG=$(CROSS)-pkg-config
+CC = $(CROSS)-gcc
+
+CFLAGS = -I. \
+	 `$(PKG_CONFIG) --cflags freetype2 glew glfw3`
+LDFLAGS = -lm \
+	  `$(PKG_CONFIG) -libs freetype2 glew glfw3`
+OPTIONS = -O2 -Wall
+OBJ = main.o
+GAME001OBJ = `find game001 -regex ".*\.o"`
+
+all: duck
+
+.c.o:
+	$(CC) $(OPTIONS) $(CFLAGS) -c $<
+
+main.o: game001/game001.h
+
+game001:
+	cd game001 && make -f Makefile.windows
+
+duck: $(OBJ) game001
+	$(CC) -o $@.exe $(GAME001OBJ) $(OBJ) $(LDFLAGS) $(OPTIONS)
+
+clean:
+	rm $(OBJ)
+	rm duck.exe
+	cd game001 && make -f Makefile.windows clean
+
+.PHONY: game001
