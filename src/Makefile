@@ -4,7 +4,7 @@ CFLAGS = -I. \
 LDFLAGS = -lglfw -lGL -lGLEW -lm \
 	  `$(PKG_CONFIG) -libs freetype2`
 OPTIONS = -O2 -Wall
-OBJ = main.o player.o
+OBJ = main.o player.o crab.o entity.o
 GAME001OBJ = `find game001 -regex ".*\.o"`
 CC = gcc
 
@@ -14,7 +14,9 @@ all: duck
 	$(CC) $(OPTIONS) $(CFLAGS) -c $<
 
 main.o: game001/game001.h game001/misc.h main.h player.h
-player.o: game001/game001.h game001/misc.h main.h player.h
+player.o: game001/game001.h game001/misc.h main.h player.h entity.h
+crab.o: game001/game001.h game001/misc.h main.h player.h entity.h
+entity.o: game001/misc.h main.h
 
 game001:
 	cd game001 && make

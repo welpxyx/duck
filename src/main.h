@@ -1,3 +1,8 @@
+#include "game001/game001.h"
+
+#ifndef MAIN_H
+#define MAIN_H
+
 #define GAME_INPUT_SIZE 5
 #define FRAMES_TILL_CHANGE_IDLE 100
 #define FRAMES_TILL_CHANGE_WALK 50
@@ -22,4 +27,8 @@ struct Game {
 	int input[GAME_INPUT_SIZE];
 	int winsize[2];
 	struct Box *boxes;
+	Spritesheet crabSprite;
+	Renderer renderer;
 };
+
+#endif
